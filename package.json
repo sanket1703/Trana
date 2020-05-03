@@ -1,0 +1,46 @@
+{
+  "name": "tra",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@react-native-community/masked-view": "^0.1.9",
+    "@react-native-firebase/app": "^6.7.1",
+    "@react-native-firebase/auth": "^6.7.1",
+    "@react-native-firebase/firestore": "^6.7.1",
+    "@react-native-firebase/storage": "^6.7.1",
+    "base-64": "^0.1.0",
+    "firebase": "^7.14.1",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-geocoding": "^0.4.0",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-get-location": "^1.4.2",
+    "react-native-paper": "^3.8.0",
+    "react-native-popup-dialog": "^0.18.3",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.5.0",
+    "react-native-vector-icons": "^6.6.0",
+    "react-navigation": "^4.3.7",
+    "react-navigation-stack": "^2.3.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "babel-jest": "^25.3.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.3.0",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-test-renderer": "16.11.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
