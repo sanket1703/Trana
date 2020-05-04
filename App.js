@@ -16,81 +16,67 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {createSwitchNavigator,createAppContainer} from 'react-navigation';
+import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
-import home from "/Users/apple/tra/src/screens/home.js"
-import signUp from "./src/screens/signUp.js"
-import login from "./src/screens/login.js"
-import splashScreen from "./src/screens/splashScreen.js"
-import reportDetails from  "./src/screens/reportDetails.js"
-import medicines from "./src/screens/medicines.js"
+import home from './src/screens/home.js';
+import signUp from './src/screens/signUp.js';
+import login from './src/screens/login.js';
+import splashScreen from './src/screens/splashScreen.js';
+import reportDetails from './src/screens/reportDetails.js';
+import medicines from './src/screens/medicines.js';
+import forgotpassword from './src/screens/forgotpassword';
 export default class App extends React.Component {
-  
-  
-
   render() {
-    return (
-          <AppContainer/> 
-    );
+    return <AppContainer />;
   }
 }
 
 const Login = createSwitchNavigator(
   {
-    login : login ,
-    signUp : signUp
+    login: login,
+    signUp: signUp,
+    forgotpassword: forgotpassword,
   },
   {
     initialRouteName: 'login',
-  }
-
+  },
 );
 const SplashNav = createSwitchNavigator(
   {
-    splashScreen : splashScreen,
-    Signoutnav : Login
+    splashScreen: splashScreen,
+    Signoutnav: Login,
   },
   {
-    initialRouteName:'splashScreen'
-  }
-)
+    initialRouteName: 'splashScreen',
+  },
+);
 const stack = createStackNavigator(
   {
-    home : {
-      screen : home,
-     
+    home: {
+      screen: home,
     },
-    reportDetails : 
-    {
-      screen :reportDetails
+    reportDetails: {
+      screen: reportDetails,
     },
-    medicines : {
-      screen : medicines
-    }
-    
-   
+    medicines: {
+      screen: medicines,
+    },
   },
-  {headerMode:'none'}
-)
+  {headerMode: 'none'},
+);
 
-
-
-const Base  = createSwitchNavigator(
+const Base = createSwitchNavigator(
   {
-    Login : Login , 
-    stack : stack
+    Login: Login,
+    stack: stack,
   },
-  {initialRouteName : "Login"}
-)
+  {initialRouteName: 'Login'},
+);
 
+const Main = createSwitchNavigator({
+  SplashNav: SplashNav,
 
-
-
-const Main = createSwitchNavigator(
-  {
-    SplashNav : SplashNav,
-    Base :  Base 
-  }
-)
-const AppContainer = createAppContainer(Main)
+  Base: Base,
+});
+const AppContainer = createAppContainer(Main);
