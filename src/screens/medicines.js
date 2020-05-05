@@ -2,16 +2,15 @@ import React from 'react';
 import {
   View,
   TextInput,
-  ImageBackground,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Picker,
   Alert,
   Image,
   ActivityIndicator,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';

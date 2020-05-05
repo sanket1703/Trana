@@ -5,14 +5,12 @@ import React from 'react';
 import {
   View,
   TextInput,
-  ImageBackground,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Picker,
+  Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 //import 'firebase/firestore'
 import Dialog, {
   SlideAnimation,
@@ -31,7 +29,6 @@ export default class SignUpScreen extends React.Component {
       Id: '',
       pass: '',
       pass2: '',
-
       textVisible: false,
       visible: false,
       check: false,
@@ -66,8 +63,6 @@ export default class SignUpScreen extends React.Component {
     else this.setState({check: false});
   };
   signUp = () => {
-    console.log(this.state.Id);
-    this.check();
     /*if (this.state.pass == this.state.pass2) {
             firebase.auth().createUserWithEmailAndPassword(this.state.Id, this.state.pass)
                 .then(() => this.addusertodb());
@@ -75,13 +70,23 @@ export default class SignUpScreen extends React.Component {
         else {
             this.setState({ textVisible: true })
         }*/
-    if (this.state.check) {
-      console.log('happening');
-      this.setState({visible: false});
-      if (this.state.pass == this.state.pass2) {
+    if (
+      this.state.name !== '' &&
+      this.state.Id !== '' &&
+      this.state.phone !== '' &&
+      this.state.pass !== '' &&
+      this.state.pass2 !== ''
+    ) {
+      if (this.state.pass === this.state.pass2) {
         auth()
           .createUserWithEmailAndPassword(this.state.Id, this.state.pass)
-          .then(() => this.addusertodb());
+          .then(() => {
+            console.log('User account created & signed in!');
+          })
+          .then(() => this.addusertodb())
+          .catch(function (error) {
+            Alert.alert('Cautious', error.toString());
+          });
       } else {
         this.setState({textVisible: true});
       }
@@ -89,22 +94,58 @@ export default class SignUpScreen extends React.Component {
       this.setState({visible: true});
       console.log('not happening');
     }
+    // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    //   // Handle Errors here.
+    //   var errorCode = error.code;
+    //   var errorMessage = error.message;
+    // ...
+
+    // if (
+    //   this.state.name !== '' &&
+    //   this.state.Id !== '' &&
+    //   this.state.phone !== '' &&
+    //   this.state.pass !== '' &&
+    //   this.state.pass2 !== ''
+    // ) {
+    //   this.setState({visible: false});
+    //   if (this.state.pass === this.state.pass2) {
+    //     try {
+    //       auth()
+    //         .createUserWithEmailAndPassword(this.state.Id, this.state.pass)
+    //         .then(console.log("Signnedin"),
+    //         () => this.addusertodb())
+    //         .catch((e) => Alert.alert(e));
+    //       console.log('happening');
+    //     } catch (e) {
+    //       Alert.alert(e);
+    //     }
+    //   } else {
+    //     this.setState({textVisible: true});
+    //   }
+    // } else {
+    //   this.setState({visible: true});
+    //   console.log('not happening');
+    // }
   };
   login = () => {
     this.props.navigation.navigate('login');
   };
 
-  addusertodb = () => {
-    firestore
-      .collection('Users')
-      .doc(this.state.name)
-      .set({
-        name: this.state.name,
-        email: this.state.Id.toLowerCase(),
-        phone: this.state.phone,
-      })
-      .then(() => this.props.navigation.navigate('LoginScreen'))
-      .catch((e) => console.log(e));
+  addusertodb = async () => {
+    try {
+      await firestore()
+        .collection('Users')
+        .doc()
+        .set({
+          name: this.state.name.toString(),
+          email: this.state.Id.toLowerCase(),
+          phone: this.state.phone,
+        })
+        .then(() => this.props.navigation.navigate('LoginScreen'))
+        .catch((e) => Alert.alert(e.message));
+    } catch (e) {
+      Alert.alert(e);
+    }
   };
   render() {
     return (
@@ -117,6 +158,7 @@ export default class SignUpScreen extends React.Component {
                 placeholder="Name"
                 placeholderTextColor="black"
                 style={style.textInput}
+                value={this.state.name}
                 onChangeText={this.name}></TextInput>
             </View>
             <View style={{flexDirection: 'row', padding: 5, marginBottom: 10}}>
@@ -124,16 +166,22 @@ export default class SignUpScreen extends React.Component {
               <TextInput
                 placeholder="Email"
                 placeholderTextColor="black"
+                keyboardType="email-address"
                 style={style.textInput}
-                onChangeText={this.LoginId}></TextInput>
+                value={this.state.Id}
+                onChangeText={this.LoginId}
+              />
             </View>
             <View style={{flexDirection: 'row', padding: 5, marginBottom: 10}}>
               {/* <Icon name="user-circle" size={25} color="black" style={{ paddingTop: 10, paddingLeft: 10, }} /> */}
               <TextInput
                 placeholder="Phone"
                 placeholderTextColor="black"
+                keyboardType="decimal-pad"
                 style={style.textInput}
-                onChangeText={this.phone}></TextInput>
+                value={this.state.phone}
+                onChangeText={this.phone}
+              />
             </View>
 
             <View style={{flexDirection: 'row', padding: 5, marginBottom: 10}}>
@@ -143,7 +191,9 @@ export default class SignUpScreen extends React.Component {
                 placeholder="Enter Password"
                 placeholderTextColor="black"
                 style={style.textInput}
-                onChangeText={this.Password}></TextInput>
+                value={this.state.pass}
+                onChangeText={this.Password}
+              />
             </View>
             <View style={{flexDirection: 'row', padding: 5, marginBottom: 10}}>
               {/* <Icon name="lock" size={30} color="black" style={{ paddingTop: 10, paddingLeft: 12, }} /> */}
@@ -152,7 +202,9 @@ export default class SignUpScreen extends React.Component {
                 placeholder="Re Enter your Password"
                 placeholderTextColor="black"
                 style={style.textInput}
-                onChangeText={this.RePassword}></TextInput>
+                value={this.state.pass2}
+                onChangeText={this.RePassword}
+              />
             </View>
             {this.state.textVisible ? (
               <Text style={{alignSelf: 'center', color: 'red'}}>

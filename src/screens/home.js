@@ -35,17 +35,17 @@ class home extends Component {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.medicine}>
-          <View style={[styles.button1, {width: 300, alignSelf: 'center'}]}>
+          <View
+            style={[
+              styles.button1,
+              {width: 300, alignSelf: 'center', marginTop: 10},
+            ]}>
             <Text style={styles.textbutton}>Medicines</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={this.signout}>
-          <View
-            style={[
-              styles.button1,
-              {marginTop: 200, width: 150, alignSelf: 'center'},
-            ]}>
+        <TouchableOpacity onPress={this.signout} style={{marginTop: 150}}>
+          <View style={[styles.button1, {alignSelf: 'center'}]}>
             <Text style={styles.textbutton}>Sign Out</Text>
           </View>
         </TouchableOpacity>
@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
   button1: {
     backgroundColor: '#930b0d',
     borderRadius: 10,
-    height: 50,
+    //height: 50,
+    paddingVertical: 20,
     justifyContent: 'center',
     paddingLeft: 10,
     width: 150,

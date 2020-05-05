@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ImageBackground,
+  KeyboardAvoidingView,
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -33,7 +33,7 @@ export default class LoginScreen extends React.Component {
     };
   }
   componentDidMount = async () => {
-    OneSignal.addEventListener('ids', this.onIds);
+    //OneSignal.addEventListener('ids', this.onIds);
     var d = Date(Date.now());
     this.setState({date: d.toString()});
   };
@@ -45,8 +45,9 @@ export default class LoginScreen extends React.Component {
     });
   };
   check = () => {
-    if (this.state.Id != '') this.setState({check: false});
-    else if (this.state.pass != '') this.setState({check: false});
+    if (this.state.Id === '' || this.state.pass === '')
+      this.setState({check: false});
+    // else if (this.state.pass != '') this.setState({check: false});
     else this.setState({check: true});
   };
 
@@ -56,25 +57,26 @@ export default class LoginScreen extends React.Component {
   Password = (pass) => {
     this.setState({pass: pass});
   };
-  navsidnout = () => {
-    this.props.navigation.navigate('home');
-  };
+  // navsidnout = () => {
+  //   this.props.navigation.navigate('home');
+  // };
   login = async () => {
-    this.check();
-    if (!this.state.check) {
+    //this.check();
+    if (this.state.Id !== '' && this.state.pass !== '') {
       //console.log(this.state.Id);
 
       await AsyncStorage.setItem('Id', this.state.Id);
-      // var abc = (await AsyncStorage.getItem('Id')).toString();
-      // console.log(abc);
-
-      auth()
-        .signInWithEmailAndPassword(this.state.Id, this.state.pass)
-        .then(() => this.props.navigation.navigate('home', {Id: this.state.Id}))
-        .catch((e) => this.check(e));
-    }
-    //
-    else {
+      try {
+        auth()
+          .signInWithEmailAndPassword(this.state.Id, this.state.pass)
+          .then(() =>
+            this.props.navigation.navigate('home', {Id: this.state.Id}),
+          )
+          .catch((e) => Alert.alert(e));
+      } catch (e) {
+        Alert.alert(e);
+      }
+    } else {
       Alert.alert('Caution! Enter credentials!');
     }
   };
@@ -85,21 +87,23 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{backgroundColor: '#930b0d', flex: 1}}>
-        <View style={style.container}>
-          <Text style={style.header}>TRANA</Text>
-          <View style={{flexDirection: 'row', padding: 5}}>
-            {/* <Icon name="user" size={25} color="black" style={{ paddingTop: 10 }} /> */}
-            <TextInput
-              placeholder="Login ID"
-              placeholderTextColor="black"
-              onChangeText={this.LoginId}
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              maxFontSizeMultiplier={100}
-              autoCapitalize="none"
-              style={style.textInput}></TextInput>
-          </View>
-          <Dialog
+        <KeyboardAvoidingView enabled behavior="position">
+          <View style={style.container}>
+            <Text style={style.header}>TRANA</Text>
+            <View style={{flexDirection: 'row', padding: 5}}>
+              {/* <Icon name="user" size={25} color="black" style={{ paddingTop: 10 }} /> */}
+              <TextInput
+                placeholder="Login ID"
+                placeholderTextColor="black"
+                onChangeText={this.LoginId}
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                maxFontSizeMultiplier={100}
+                autoCapitalize="none"
+                style={style.textInput}
+              />
+            </View>
+            {/* <Dialog
             visible={this.state.visible}
             dialogTitle={<DialogTitle title="CAUTION" />}
             footer={
@@ -120,41 +124,43 @@ export default class LoginScreen extends React.Component {
                 {this.state.context.toString()}
               </Text>
             </DialogContent>
-          </Dialog>
-          <View style={{flexDirection: 'row', padding: 5, marginBottom: 20}}>
-            {/* <Icon name="lock" size={30} color="black" style={{ paddingTop: 9 }} /> */}
-            <TextInput
-              secureTextEntry={true}
-              placeholder="Password"
-              placeholderTextColor="black"
-              value={this.state.pass}
-              onChangeText={this.Password}
-              style={style.textInput}></TextInput>
-          </View>
-          <TouchableOpacity
-            style={{alignSelf: 'flex-end'}}
-            onPress={() => {
-              this.props.navigation.navigate('forgotpassword');
-            }}>
-            <Text style={{}}>Forgot Password</Text>
-          </TouchableOpacity>
-          <Text></Text>
-
-          <View style={{alignSelf: 'center', paddingLeft: 0}}>
-            <TouchableOpacity onPress={this.login}>
-              <View style={style.button1}>
-                <Text style={style.textbutton}>Log In</Text>
-              </View>
-            </TouchableOpacity>
+          </Dialog> */}
+            <View style={{flexDirection: 'row', padding: 5, marginBottom: 20}}>
+              {/* <Icon name="lock" size={30} color="black" style={{ paddingTop: 9 }} /> */}
+              <TextInput
+                secureTextEntry={true}
+                placeholder="Password"
+                placeholderTextColor="black"
+                value={this.state.pass}
+                onChangeText={this.Password}
+                style={style.textInput}
+              />
+            </View>
             <TouchableOpacity
-              style={{alignSelf: 'center'}}
-              onPress={this.signUp}>
-              <View style={style.button2}>
-                <Text style={style.textbutton}>Sign Up</Text>
-              </View>
+              style={{alignSelf: 'flex-end'}}
+              onPress={() => {
+                this.props.navigation.navigate('forgotpassword');
+              }}>
+              <Text style={{}}>Forgot Password</Text>
             </TouchableOpacity>
+            <Text></Text>
+
+            <View style={{alignSelf: 'center', paddingLeft: 0}}>
+              <TouchableOpacity onPress={this.login}>
+                <View style={style.button1}>
+                  <Text style={style.textbutton}>Log In</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{alignSelf: 'center'}}
+                onPress={this.signUp}>
+                <View style={style.button2}>
+                  <Text style={style.textbutton}>Sign Up</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }
